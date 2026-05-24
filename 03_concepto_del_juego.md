@@ -55,48 +55,67 @@ WarPrompts apuesta por un look 3D con proporciones ligeramente estilizadas — c
 
 ## 4. Mecánicas Principales
 
-### 4.1 Sistema de Prompt como Control
-El corazón del juego. El jugador escribe en lenguaje natural qué quiere que hagan sus unidades y lo envía al LLM:
+### 4.1 Sistema de Control Dual
+
+El jugador tiene dos formas de dar órdenes a sus unidades:
+
+**Control rápido (movimiento simple):** Tocar una unidad abre un menú contextual. Tocar después cualquier punto del mapa o del minimapa mueve la unidad a esa posición sin cooldown ni prompt. Ideal para reposicionamientos rápidos.
+
+**Control por prompt (órdenes complejas):** Desde el menú contextual, el jugador activa la caja de texto y escribe en lenguaje natural:
 
 ```
-"Mueve la infantería hacia el norte y rodea la colina por la izquierda.
- Que los arqueros cubran desde atrás."
+"Manda al Legionario y al Caballero al Nexo central.
+ Que el Shinobi los cubra desde el bosque."
 ```
 
-El LLM interpreta la intención y traduce el texto en acciones concretas para las unidades (waypoints, objetivos de ataque, formaciones). La calidad de la interpretación depende de la claridad del prompt — los jugadores aprenden implícitamente a comunicarse mejor.
+El LLM interpreta la intención y coordina múltiples unidades simultáneamente. Este modo tiene cooldown de 6 segundos entre prompts.
 
-**Modo tiempo real libre:** El jugador puede enviar prompts en cualquier momento. No hay "turno" formal — las unidades ejecutan la última instrucción recibida mientras el juego avanza. Esto crea tensión: ¿mando otra orden ahora o dejo que la anterior se ejecute?
+**La tensión táctica:** ¿uso el prompt ahora para una jugada compleja, o muevo rápido y espero el cooldown? La elección entre ambos modos define el ritmo de cada jugador.
 
-### 4.2 Tipos de Unidades
-Tres categorías base con roles distintos:
+### 4.2 Categorías de Unidades (6)
 
-| Unidad | Rol | Fortaleza | Debilidad |
-|---|---|---|---|
-| **Infantería** | Combate cuerpo a cuerpo, captura de zonas | Alta vida, buen en terreno urbano | Lenta, vulnerable a proyectiles |
-| **Arqueros / Tiradores** | Daño a distancia, cobertura | Alto alcance, bajo costo | Frágiles en combate directo |
-| **Caballería / Vehículos** | Movilidad y flanqueo | Muy rápida, alto impacto | Cara, difícil de controlar con precisión |
+El juego tiene 6 categorías tácticas. Antes de cada partida, el jugador elige **5 de las 6** — la categoría omitida es su punto débil estratégico:
 
-Cada tipo responde de forma diferente a la misma instrucción — "avanza" en infantería es lento y en caballería es una carga.
+| Categoría | Rol | Características |
+|---|---|---|
+| 🛡️ **Tanque** | Absorbe daño, bloquea avance | Alta vida, lento |
+| 🏹 **Distancia** | Daño desde lejos | Alto alcance, frágil |
+| 🗡️ **Asesino** | Elimina unidades prioritarias | Muy rápido, muy frágil |
+| 🔮 **Mago** | Habilidades especiales y control de zona | AOE, efectos de estado |
+| ⚒️ **Obrero** | Economía y construcción | Recolecta recursos, construye estructuras |
+| 🔭 **Explorador** | Inteligencia y sigilo | Revela mapa, difícil de detectar |
 
-### 4.3 Control del Mapa
-El mapa está dividido en **zonas** (aldeas, colinas, cruces de caminos). Controlar zonas genera puntos de territorio con el tiempo. Ganar por:
-- **Dominio:** Tener más puntos de territorio acumulados al finalizar el tiempo
+Los personajes de cada categoría provienen de distintas **eras históricas** (ver GDD, Sección 2). Cada jugador lleva los personajes que tiene desbloqueados en su colección.
+
+### 4.3 Control del Mapa y Recursos
+
+El mapa está dividido en **zonas de control** capturables. Controlar zonas genera puntos de territorio con el tiempo.
+
+Los **Obreros** recolectan recursos en zonas especiales del mapa y pueden construir estructuras (torres, barricadas, puestos mineros, cuarteles). Los recursos también son necesarios para la **evolución de unidades** en partida.
+
+Condiciones de victoria:
+- **Dominio:** Acumular 100 puntos de territorio antes que el rival
 - **Eliminación:** Destruir todas las unidades enemigas
+- **Tiempo:** Al minuto 15, gana quien tenga más puntos
 
-### 4.4 Sistema de Potenciadores
+### 4.4 Evolución de Unidades en Partida
+
+Las unidades evolucionan a versiones más poderosas al cumplir **ambas** condiciones: kills acumuladas **y** recursos gastados. Hay 3 niveles: Base → Elite → Legendario. El nivel Legendario desbloquea una habilidad especial única por personaje.
+
+### 4.5 Sistema de Potenciadores
 Se desbloquean al cumplir objetivos durante la partida:
 
 | Potenciador | Cómo se gana | Efecto |
 |---|---|---|
 | 🔡 **Prompt extendido** | Controlar 3 zonas simultáneamente | +150 caracteres al límite del prompt |
-| 🔍 **Espionaje** | Destruir una unidad de exploración enemiga | Ver el próximo prompt del rival sin que lo sepa |
+| 🔍 **Espionaje** | Destruir una unidad exploradora enemiga | Ver el próximo prompt del rival sin que lo sepa |
 | ⏳ **Reintento** | Defender una zona por 2 minutos seguidos | Reenviar el último prompt con resultado diferente |
 | 🛡️ **Escudo de prompt** | Eliminar 5 unidades enemigas | El enemigo no puede espiarte durante 60 segundos |
 
-### 4.5 Limitaciones del Prompt (Equilibrio)
+### 4.6 Limitaciones del Prompt (Equilibrio)
 Para mantener el juego balanceado, el prompt tiene restricciones iniciales:
 - **Límite de caracteres:** 280 caracteres por defecto (ampliable con potenciadores)
-- **Cooldown:** Mínimo 5 segundos entre prompts para evitar spam
+- **Cooldown:** 6 segundos entre prompts para crear tensión táctica
 - **Idioma libre:** El jugador puede escribir en cualquier idioma — el LLM lo interpreta igualmente
 
 ---
@@ -108,10 +127,12 @@ Para mantener el juego balanceado, el prompt tiene restricciones iniciales:
 | **Género** | RTS competitivo 1 vs 1 |
 | **Plataforma** | Móvil (iOS / Android) |
 | **Estilo visual** | 3D semirealista, vista isométrica |
-| **Control** | Prompts de lenguaje natural → LLM → unidades |
-| **Ritmo** | Tiempo real libre con cooldown de prompt |
-| **Victoria** | Dominio del mapa o eliminación del ejército rival |
-| **Diferenciador** | El prompt engineering es la habilidad del jugador |
+| **Control** | Dual: movimiento rápido táctil + prompts de lenguaje natural → LLM |
+| **Ritmo** | Tiempo real libre con cooldown de 6 seg entre prompts |
+| **Victoria** | Dominio del mapa, eliminación del ejército rival, o más puntos al tiempo límite |
+| **Personajes** | Colección personal por eras históricas — 6 categorías, 5 seleccionadas por partida |
+| **Evolución** | Las unidades evolucionan en partida (Base → Elite → Legendario) con kills + recursos |
+| **Diferenciador** | El prompt engineering y la construcción del equipo son la habilidad del jugador |
 
 ---
 
