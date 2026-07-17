@@ -1,5 +1,7 @@
 # WarPrompts — V0 (prueba de concepto)
 
+🌐 Dominio oficial del proyecto: [warpromptsgame.com](https://warpromptsgame.com)
+
 Implementación de la V0 descrita en [`03_concepto_del_juego.md`](../03_concepto_del_juego.md) (sección 7):
 web, 2D simple, un tipo de unidad, control **únicamente** por prompts a un LLM, 1 jugador (azul) vs bot sencillo (rojo).
 
