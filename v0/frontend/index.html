@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>WarPrompts — V0</title>
+<link rel="stylesheet" href="style.css" />
+<script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>⚔️ WarPrompts <span class="tag">V0 — prueba de concepto</span></h1>
+    <div id="hud">
+      <div class="score blue">🔵 <span id="score-blue">0</span></div>
+      <div class="timer">⏱ <span id="timer">0:00</span></div>
+      <div class="score red">🔴 <span id="score-red">0</span></div>
+    </div>
+  </header>
+
+  <main>
+    <div id="game-container"></div>
+
+    <section id="side-panel">
+      <div id="status-banner" class="hidden"></div>
+
+      <div id="log-panel">
+        <h2>Registro</h2>
+        <ul id="log-list"></ul>
+      </div>
+
+      <form id="prompt-form">
+        <textarea
+          id="prompt-input"
+          maxlength="280"
+          placeholder='Escribe una orden para tus unidades azules, ej: "Manda todas mis unidades al centro del mapa"'
+        ></textarea>
+        <div class="prompt-meta">
+          <span id="char-counter">0 / 280</span>
+          <span id="cooldown-label"></span>
+        </div>
+        <div id="cooldown-bar"><div id="cooldown-fill"></div></div>
+        <p id="form-error" class="hidden"></p>
+        <button id="send-btn" type="submit">Enviar orden</button>
+      </form>
+
+      <div class="controls-help">
+        <p>La V0 prueba únicamente el control por prompts (mecánica pura, sin atajos de click).</p>
+        <button id="new-game-btn" type="button">🔄 Nueva partida</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="main.js"></script>
+</body>
+</html>
